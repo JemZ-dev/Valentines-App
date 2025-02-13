@@ -86,7 +86,6 @@
         .no-btn:hover {
             background-color: #555555;
         }
-
     </style>
 </head>
 <body>
@@ -102,7 +101,7 @@
 
     <div class="btn-container">
         <button onclick="alert('Yay! Happy Valentine’s Day! ❤️')">Yes!</button>
-        <button class="no-btn" id="noButton" onmouseover="moveNoButton()" onclick="showMessage()">No</button>
+        <button class="no-btn" id="noButton" onmouseover="moveNoButton()" ontouchstart="moveNoButton()" onclick="showMessage()">No</button>
     </div>
 
     <script>
