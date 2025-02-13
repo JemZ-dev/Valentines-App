@@ -53,7 +53,7 @@
         }
 
         .gif-container img {
-            width: 260px;
+            width: 340px;
             height: auto;
         }
 
@@ -123,29 +123,48 @@
     <script>
         let moveCount = 0;
         let noButton = document.getElementById('no-btn');
+        let loveSong = document.getElementById('love-song');
+        let sadSong = document.getElementById('sad-song');
 
         function moveNoButton() {
             if (moveCount < 5) {
                 let newX = Math.random() * (window.innerWidth - 150);
                 let newY = Math.random() * (window.innerHeight - 150);
+                noButton.style.position = "absolute";
                 noButton.style.left = newX + "px";
                 noButton.style.top = newY + "px";
                 moveCount++;
             }
         }
 
+        // Fix for mobile touch
+        noButton.addEventListener("mouseover", moveNoButton);
+        noButton.addEventListener("touchstart", function (event) {
+            event.preventDefault(); // Prevent accidental double taps
+            moveNoButton();
+        });
+
+        function stopAllAudio() {
+            loveSong.pause();
+            sadSong.pause();
+            loveSong.currentTime = 0;
+            sadSong.currentTime = 0;
+        }
+
         function sayYes() {
+            stopAllAudio(); // Stop any currently playing audio
             document.getElementById('valentine-img').src = "heart eyes cat.gif";
             document.getElementById('message').innerText = "Yay! You're my Valentine! 💖💘";
-            document.getElementById('love-song').play();
+            loveSong.play();
             createHearts();
         }
 
         function sayNo() {
             if (moveCount >= 5) {
+                stopAllAudio(); // Stop any currently playing audio
                 document.getElementById('valentine-img').src = "cat cry.gif";
                 document.getElementById('message').innerText = "Maybe next time 😢";
-                document.getElementById('sad-song').play();
+                sadSong.play();
                 noButton.style.display = "none"; // Hide No button after clicking
             }
         }
@@ -161,6 +180,8 @@
                 setTimeout(() => heart.remove(), 3000);
             }
         }
+
+        noButton.addEventListener("click", sayNo);
     </script>
 </body>
 </html>
