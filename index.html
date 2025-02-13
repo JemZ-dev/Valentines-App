@@ -9,13 +9,16 @@
             background-color: #ffcccc;
             text-align: center;
             font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
             color: #d10060;
-            font-size: 50px;
+            font-size: 45px;
             font-family: 'Brush Script MT', cursive;
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 5px;
         }
 
         .heart {
@@ -24,6 +27,7 @@
             animation: heartbeat 1s infinite;
             display: inline-block;
             vertical-align: middle;
+            margin: 0;
         }
 
         .gif-inline {
@@ -40,7 +44,7 @@
         }
 
         .message {
-            font-size: 24px;
+            font-size: 22px;
             color: #800020;
             margin-top: 10px;
         }
@@ -53,7 +57,7 @@
         }
 
         .gif-container img {
-            width: 200px;
+            width: 180px;
             height: auto;
         }
 
@@ -67,7 +71,7 @@
             color: white;
             border: none;
             padding: 10px 20px;
-            font-size: 20px;
+            font-size: 18px;
             margin: 10px;
             border-radius: 10px;
             cursor: pointer;
@@ -86,22 +90,47 @@
         .no-btn:hover {
             background-color: #555555;
         }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 35px;
+            }
+
+            .heart {
+                font-size: 30px;
+            }
+
+            .gif-inline {
+                width: 40px;
+            }
+
+            .gif-container img {
+                width: 150px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 8px 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>❤️ Happy Valentine's ❤️</h1>
 
-    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Heart GIF" class="gif-inline"></p>
+    <!-- Heart emojis with GIF on the same line -->
+    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Sparkling GIF" class="gif-inline"></p>
 
+    <!-- Centered GIF -->
     <div class="gif-container">
-        <img src="center cat.png" alt="Valentine Image">
+        <img src="center cat.png" alt="Valentine Cat">
     </div>
 
     <p class="message">Will you be my Valentine? 💌</p>
 
     <div class="btn-container">
         <button onclick="alert('Yay! Happy Valentine’s Day! ❤️')">Yes!</button>
-        <button class="no-btn" id="noButton" onmouseover="moveNoButton()" ontouchstart="moveNoButton()" onclick="showMessage()">No</button>
+        <button class="no-btn" id="noButton" onmouseover="moveNoButton()" onclick="handleNoClick()">No</button>
     </div>
 
     <script>
@@ -115,16 +144,30 @@
 
                 noButton.style.left = newX + "px";
                 noButton.style.top = newY + "px";
-
                 moveCount++;
             }
         }
 
-        function showMessage() {
+        function handleNoClick() {
             if (moveCount >= 5) {
                 alert("Okay... Maybe next time 😢");
             }
         }
+
+        function detectInAppBrowser() {
+            let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            if (
+                userAgent.includes("FBAN") || userAgent.includes("FBAV") || 
+                userAgent.includes("Instagram") || 
+                userAgent.includes("Snapchat") || 
+                userAgent.includes("TikTok")
+            ) {
+                alert("For the best experience, please open this page in Safari. Tap '•••' and choose 'Open in Safari'.");
+            }
+        }
+
+        detectInAppBrowser();
     </script>
 </body>
 </html>
