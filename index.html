@@ -9,6 +9,8 @@
             background-color: #ffcccc;
             text-align: center;
             font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
@@ -31,7 +33,6 @@
             width: 50px;
             height: auto;
             vertical-align: middle;
-            margin-left: 5px;
         }
 
         @keyframes heartbeat {
@@ -43,7 +44,7 @@
         .message {
             font-size: 24px;
             color: #800020;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .gif-container {
@@ -56,12 +57,12 @@
         .gif-container img {
             width: 200px;
             height: auto;
+            transition: 0.5s;
         }
 
         .btn-container {
-            margin-top: 15px;
+            margin-top: 20px;
             position: relative;
-            height: 60px;
         }
 
         button {
@@ -83,26 +84,24 @@
         .no-btn {
             background-color: #888888;
             position: absolute;
-            transition: 0.2s ease-out;
+            transition: transform 0.3s;
         }
 
         .no-btn:hover {
             background-color: #555555;
+            transform: translate(20px, 10px);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             h1 {
                 font-size: 40px;
-            }
-            .heart {
-                font-size: 30px;
             }
             .gif-container img {
                 width: 150px;
             }
             button {
                 font-size: 18px;
-                padding: 8px 15px;
+                padding: 8px 16px;
             }
         }
     </style>
@@ -110,45 +109,47 @@
 <body>
     <h1>❤️ Happy Valentine's ❤️</h1>
 
-    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Blushing GIF" class="gif-inline"></p>
+    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Sparkling GIF" class="gif-inline"></p>
 
     <div class="gif-container">
-        <img src="center cat.png" alt="Cute Cat">
+        <img id="valentine-img" src="center cat.png" alt="Static Cat">
     </div>
 
-    <p class="message">Will you be my Valentine? 💌</p>
+    <p class="message" id="message">Will you be my Valentine? 💌</p>
 
     <div class="btn-container">
-        <button onclick="alert('Yay! Happy Valentine’s Day! ❤️')">Yes!</button>
-        <button class="no-btn" onclick="moveNoButton()" onmouseover="moveNoButton()" ontouchstart="moveNoButton()">No</button>
+        <button onclick="sayYes()">Yes! ❤️</button>
+        <button class="no-btn" id="no-btn" onclick="moveNoButton()">No 😢</button>
     </div>
 
     <script>
         let moveCount = 0;
-        let canClickNo = false;
 
         function moveNoButton() {
             if (moveCount < 5) {
-                let noButton = document.querySelector('.no-btn');
-                let newX = Math.random() * (window.innerWidth - 120);
-                let newY = Math.random() * (window.innerHeight - 60);
+                let noButton = document.getElementById('no-btn');
+                let maxX = window.innerWidth - 150;
+                let maxY = window.innerHeight - 150;
+                let newX = Math.random() * maxX;
+                let newY = Math.random() * maxY;
 
                 noButton.style.left = newX + "px";
                 noButton.style.top = newY + "px";
-
                 moveCount++;
-
-                if (moveCount === 5) {
-                    canClickNo = true;
-                }
+            } else {
+                document.getElementById('no-btn').onclick = sayNo;
             }
         }
 
-        document.querySelector('.no-btn').addEventListener('click', function () {
-            if (canClickNo) {
-                alert("Okay... Maybe next time 😢");
-            }
-        });
+        function sayYes() {
+            document.getElementById('valentine-img').src = "heart eyes cat.gif";
+            document.getElementById('message').innerText = "Yay! You're my Valentine! 💖💘";
+        }
+
+        function sayNo() {
+            document.getElementById('valentine-img').src = "cat cry.gif";
+            document.getElementById('message').innerText = "Oh... maybe next time 😢💔";
+        }
     </script>
 </body>
 </html>
