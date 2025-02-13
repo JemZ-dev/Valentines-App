@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's App</title>
+    <style>
+        body {
+            background-color: #ffcccc;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            color: #d10060;
+            font-size: 50px;
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .heart {
+            font-size: 40px;
+            color: red;
+            animation: heartbeat 1s infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Styling for GIF next to heart emojis */
+        .emoji-gif {
+            width: 50px;
+            height: auto;
+            vertical-align: middle;
+            margin-left: 5px;
+            margin-bottom: 0px; /* Reduced to remove extra space */
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .message {
+            font-size: 24px;
+            color: #800020;
+            margin-top: 20px;
+        }
+
+        /* Centered Image (Cat in the middle) */
+        .center-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px; /* Reduced to bring it closer to hearts */
+        }
+
+        .center-image-container img {
+            width: 200px;
+            height: auto;
+        }
+
+        /* Button container */
+        .button-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        /* Common button styling */
+        button {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #d10060;
+        }
+
+        /* "No" button that moves */
+        .no-button {
+            background-color: #888888;
+            position: absolute;
+        }
+
+        .no-button:hover {
+            background-color: #555555;
+        }
+    </style>
+</head>
+<body>
+    <h1>❤️ Happy Valentine's ❤️</h1>
+
+    <!-- Heart emojis with GIF beside them -->
+    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Cute Blushing Cat GIF" class="emoji-gif"></p>
+
+    <!-- Centered Image (Main Cat) -->
+    <div class="center-image-container">
+        <img src="center cat.png" alt="Cute Cat">
+    </div>
+
+    <p class="message">Will you be my Valentine? 💌</p>
+
+    <div class="button-container">
+        <button onclick="alert('Yay! Happy Valentine’s Day! ❤️')">Yes!</button>
+        <button class="no-button" onclick="moveNoBtn()">No</button>
+    </div>
+
+    <script>
+        let moveCount = 0;
+
+        function moveNoBtn() {
+            let noButton = document.querySelector('.no-button');
+
+            if (moveCount < 5) {
+                let newX = Math.random() * (window.innerWidth - 150);
+                let newY = Math.random() * (window.innerHeight - 150);
+
+                noButton.style.left = newX + "px";
+                noButton.style.top = newY + "px";
+
+                moveCount++;
+            } else {
+                noButton.onclick = function() {
+                    alert("Okay... Maybe next time 😢");
+                };
+            }
+        }
+    </script>
+</body>
+</html>
