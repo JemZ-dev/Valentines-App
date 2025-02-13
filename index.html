@@ -26,13 +26,11 @@
             vertical-align: middle;
         }
 
-        /* Styling for GIF next to heart emojis */
-        .emoji-gif {
+        .gif-inline {
             width: 50px;
             height: auto;
             vertical-align: middle;
             margin-left: 5px;
-            margin-bottom: 0px; /* Reduced to remove extra space */
         }
 
         @keyframes heartbeat {
@@ -44,29 +42,26 @@
         .message {
             font-size: 24px;
             color: #800020;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
-        /* Centered Image (Cat in the middle) */
-        .center-image-container {
+        .gif-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 5px; /* Reduced to bring it closer to hearts */
+            margin: 10px auto;
         }
 
-        .center-image-container img {
+        .gif-container img {
             width: 200px;
             height: auto;
         }
 
-        /* Button container */
-        .button-container {
+        .btn-container {
             margin-top: 20px;
             position: relative;
         }
 
-        /* Common button styling */
         button {
             background-color: #ff4d6d;
             color: white;
@@ -83,53 +78,52 @@
             background-color: #d10060;
         }
 
-        /* "No" button that moves */
-        .no-button {
+        .no-btn {
             background-color: #888888;
             position: absolute;
         }
 
-        .no-button:hover {
+        .no-btn:hover {
             background-color: #555555;
         }
+
     </style>
 </head>
 <body>
     <h1>❤️ Happy Valentine's ❤️</h1>
 
-    <!-- Heart emojis with GIF beside them -->
-    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Cute Blushing Cat GIF" class="emoji-gif"></p>
+    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Heart GIF" class="gif-inline"></p>
 
-    <!-- Centered Image (Main Cat) -->
-    <div class="center-image-container">
-        <img src="center cat.png" alt="Cute Cat">
+    <div class="gif-container">
+        <img src="center cat.png" alt="Valentine Image">
     </div>
 
     <p class="message">Will you be my Valentine? 💌</p>
 
-    <div class="button-container">
+    <div class="btn-container">
         <button onclick="alert('Yay! Happy Valentine’s Day! ❤️')">Yes!</button>
-        <button class="no-button" onclick="moveNoBtn()">No</button>
+        <button class="no-btn" id="noButton" onmouseover="moveNoButton()" onclick="showMessage()">No</button>
     </div>
 
     <script>
         let moveCount = 0;
+        let noButton = document.getElementById("noButton");
 
-        function moveNoBtn() {
-            let noButton = document.querySelector('.no-button');
-
+        function moveNoButton() {
             if (moveCount < 5) {
-                let newX = Math.random() * (window.innerWidth - 150);
-                let newY = Math.random() * (window.innerHeight - 150);
+                let newX = Math.random() * (window.innerWidth - 100);
+                let newY = Math.random() * (window.innerHeight - 100);
 
                 noButton.style.left = newX + "px";
                 noButton.style.top = newY + "px";
 
                 moveCount++;
-            } else {
-                noButton.onclick = function() {
-                    alert("Okay... Maybe next time 😢");
-                };
+            }
+        }
+
+        function showMessage() {
+            if (moveCount >= 5) {
+                alert("Okay... Maybe next time 😢");
             }
         }
     </script>
