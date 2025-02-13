@@ -19,37 +19,10 @@
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
         }
 
-        .heart {
-            font-size: 40px;
-            color: red;
-            animation: heartbeat 1s infinite;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .gif-inline {
-            width: 50px;
-            height: auto;
-            vertical-align: middle;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
         .message {
             font-size: 24px;
             color: #800020;
             margin-top: 20px;
-        }
-
-        .gif-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px auto;
         }
 
         .gif-container img {
@@ -104,8 +77,6 @@
 <body>
     <h1>❤️ Happy Valentine's ❤️</h1>
 
-    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Sparkling GIF" class="gif-inline"></p>
-
     <div class="gif-container">
         <img id="valentine-img" src="center cat.png" alt="Animated Heart">
     </div>
@@ -114,7 +85,7 @@
 
     <div class="btn-container">
         <button onclick="sayYes()">Yes! 💖</button>
-        <button id="no-btn" class="no-btn" onmouseover="moveNoButton()" onclick="sayNo()">No 😢</button>
+        <button id="no-btn" class="no-btn">No 😢</button>
     </div>
 
     <audio id="love-song" src="i like me better.mp3"></audio>
@@ -137,13 +108,6 @@
             }
         }
 
-        // Fix for mobile touch
-        noButton.addEventListener("mouseover", moveNoButton);
-        noButton.addEventListener("touchstart", function (event) {
-            event.preventDefault(); // Prevent accidental double taps
-            moveNoButton();
-        });
-
         function stopAllAudio() {
             loveSong.pause();
             sadSong.pause();
@@ -152,7 +116,7 @@
         }
 
         function sayYes() {
-            stopAllAudio(); // Stop any currently playing audio
+            stopAllAudio();
             document.getElementById('valentine-img').src = "heart eyes cat.gif";
             document.getElementById('message').innerText = "Yay! You're my Valentine! 💖💘";
             loveSong.play();
@@ -161,7 +125,7 @@
 
         function sayNo() {
             if (moveCount >= 5) {
-                stopAllAudio(); // Stop any currently playing audio
+                stopAllAudio();
                 document.getElementById('valentine-img').src = "cat cry.gif";
                 document.getElementById('message').innerText = "Maybe next time 😢";
                 sadSong.play();
@@ -181,7 +145,21 @@
             }
         }
 
+        // Properly bind events to No button
+        noButton.addEventListener("mouseover", moveNoButton);
         noButton.addEventListener("click", sayNo);
+
+        // Fix for mobile touch (tap = move, long press = click)
+        noButton.addEventListener("touchstart", function (event) {
+            event.preventDefault();
+            moveNoButton();
+        });
+
+        noButton.addEventListener("touchend", function (event) {
+            if (moveCount >= 5) {
+                sayNo();
+            }
+        });
     </script>
 </body>
 </html>
