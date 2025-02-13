@@ -9,8 +9,7 @@
             background-color: #ffcccc;
             text-align: center;
             font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
+            overflow-x: hidden;
         }
 
         h1 {
@@ -18,7 +17,6 @@
             font-size: 50px;
             font-family: 'Brush Script MT', cursive;
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-            margin-bottom: 10px;
         }
 
         .heart {
@@ -51,13 +49,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 10px auto;
+            margin: 20px auto;
         }
 
         .gif-container img {
-            width: 200px;
+            width: 260px;
             height: auto;
-            transition: 0.5s;
         }
 
         .btn-container {
@@ -84,25 +81,23 @@
         .no-btn {
             background-color: #888888;
             position: absolute;
-            transition: transform 0.3s;
         }
 
         .no-btn:hover {
             background-color: #555555;
-            transform: translate(20px, 10px);
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 40px;
-            }
-            .gif-container img {
-                width: 150px;
-            }
-            button {
-                font-size: 18px;
-                padding: 8px 16px;
-            }
+        /* Floating hearts animation */
+        @keyframes floatHearts {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 30px;
+            color: red;
+            animation: floatHearts 3s linear infinite;
         }
     </style>
 </head>
@@ -112,43 +107,59 @@
     <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Sparkling GIF" class="gif-inline"></p>
 
     <div class="gif-container">
-        <img id="valentine-img" src="center cat.png" alt="Static Cat">
+        <img id="valentine-img" src="center cat.png" alt="Animated Heart">
     </div>
 
-    <p class="message" id="message">Will you be my Valentine? 💌</p>
+    <p id="message" class="message">Will you be my Valentine? 💌</p>
 
     <div class="btn-container">
-        <button onclick="sayYes()">Yes! ❤️</button>
-        <button class="no-btn" id="no-btn" onclick="moveNoButton()">No 😢</button>
+        <button onclick="sayYes()">Yes! 💖</button>
+        <button id="no-btn" class="no-btn" onmouseover="moveNoButton()" onclick="sayNo()">No 😢</button>
     </div>
+
+    <audio id="love-song" src="i like me better.mp3"></audio>
+    <audio id="sad-song" src="me and my broken heart.mp3"></audio>
 
     <script>
         let moveCount = 0;
+        let noButton = document.getElementById('no-btn');
 
         function moveNoButton() {
             if (moveCount < 5) {
-                let noButton = document.getElementById('no-btn');
-                let maxX = window.innerWidth - 150;
-                let maxY = window.innerHeight - 150;
-                let newX = Math.random() * maxX;
-                let newY = Math.random() * maxY;
-
+                let newX = Math.random() * (window.innerWidth - 150);
+                let newY = Math.random() * (window.innerHeight - 150);
                 noButton.style.left = newX + "px";
                 noButton.style.top = newY + "px";
                 moveCount++;
-            } else {
-                document.getElementById('no-btn').onclick = sayNo;
             }
         }
 
         function sayYes() {
             document.getElementById('valentine-img').src = "heart eyes cat.gif";
             document.getElementById('message').innerText = "Yay! You're my Valentine! 💖💘";
+            document.getElementById('love-song').play();
+            createHearts();
         }
 
         function sayNo() {
-            document.getElementById('valentine-img').src = "cat cry.gif";
-            document.getElementById('message').innerText = "Oh... maybe next time 😢💔";
+            if (moveCount >= 5) {
+                document.getElementById('valentine-img').src = "cat cry.gif";
+                document.getElementById('message').innerText = "Maybe next time 😢";
+                document.getElementById('sad-song').play();
+                noButton.style.display = "none"; // Hide No button after clicking
+            }
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 10; i++) {
+                let heart = document.createElement("div");
+                heart.className = "floating-heart";
+                heart.innerText = "❤️";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 3000);
+            }
         }
     </script>
 </body>
