@@ -9,16 +9,14 @@
             background-color: #ffcccc;
             text-align: center;
             font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
         }
 
         h1 {
             color: #d10060;
-            font-size: 45px;
+            font-size: 50px;
             font-family: 'Brush Script MT', cursive;
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
         .heart {
@@ -27,7 +25,6 @@
             animation: heartbeat 1s infinite;
             display: inline-block;
             vertical-align: middle;
-            margin: 0;
         }
 
         .gif-inline {
@@ -44,7 +41,7 @@
         }
 
         .message {
-            font-size: 22px;
+            font-size: 24px;
             color: #800020;
             margin-top: 10px;
         }
@@ -57,13 +54,14 @@
         }
 
         .gif-container img {
-            width: 180px;
+            width: 200px;
             height: auto;
         }
 
         .btn-container {
-            margin-top: 20px;
+            margin-top: 15px;
             position: relative;
+            height: 60px;
         }
 
         button {
@@ -71,7 +69,7 @@
             color: white;
             border: none;
             padding: 10px 20px;
-            font-size: 18px;
+            font-size: 20px;
             margin: 10px;
             border-radius: 10px;
             cursor: pointer;
@@ -85,6 +83,7 @@
         .no-btn {
             background-color: #888888;
             position: absolute;
+            transition: 0.2s ease-out;
         }
 
         .no-btn:hover {
@@ -93,23 +92,16 @@
 
         @media (max-width: 600px) {
             h1 {
-                font-size: 35px;
+                font-size: 40px;
             }
-
             .heart {
                 font-size: 30px;
             }
-
-            .gif-inline {
-                width: 40px;
-            }
-
             .gif-container img {
                 width: 150px;
             }
-
             button {
-                font-size: 16px;
+                font-size: 18px;
                 padding: 8px 15px;
             }
         }
@@ -118,56 +110,45 @@
 <body>
     <h1>❤️ Happy Valentine's ❤️</h1>
 
-    <!-- Heart emojis with GIF on the same line -->
-    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Sparkling GIF" class="gif-inline"></p>
+    <p class="heart">💖💘💝 <img src="embarassed cat.gif" alt="Blushing GIF" class="gif-inline"></p>
 
-    <!-- Centered GIF -->
     <div class="gif-container">
-        <img src="center cat.png" alt="Valentine Cat">
+        <img src="center cat.png" alt="Cute Cat">
     </div>
 
     <p class="message">Will you be my Valentine? 💌</p>
 
     <div class="btn-container">
         <button onclick="alert('Yay! Happy Valentine’s Day! ❤️')">Yes!</button>
-        <button class="no-btn" id="noButton" onmouseover="moveNoButton()" onclick="handleNoClick()">No</button>
+        <button class="no-btn" onclick="moveNoButton()" onmouseover="moveNoButton()" ontouchstart="moveNoButton()">No</button>
     </div>
 
     <script>
         let moveCount = 0;
-        let noButton = document.getElementById("noButton");
+        let canClickNo = false;
 
         function moveNoButton() {
             if (moveCount < 5) {
-                let newX = Math.random() * (window.innerWidth - 100);
-                let newY = Math.random() * (window.innerHeight - 100);
+                let noButton = document.querySelector('.no-btn');
+                let newX = Math.random() * (window.innerWidth - 120);
+                let newY = Math.random() * (window.innerHeight - 60);
 
                 noButton.style.left = newX + "px";
                 noButton.style.top = newY + "px";
+
                 moveCount++;
+
+                if (moveCount === 5) {
+                    canClickNo = true;
+                }
             }
         }
 
-        function handleNoClick() {
-            if (moveCount >= 5) {
+        document.querySelector('.no-btn').addEventListener('click', function () {
+            if (canClickNo) {
                 alert("Okay... Maybe next time 😢");
             }
-        }
-
-        function detectInAppBrowser() {
-            let userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-            if (
-                userAgent.includes("FBAN") || userAgent.includes("FBAV") || 
-                userAgent.includes("Instagram") || 
-                userAgent.includes("Snapchat") || 
-                userAgent.includes("TikTok")
-            ) {
-                alert("For the best experience, please open this page in Safari. Tap '•••' and choose 'Open in Safari'.");
-            }
-        }
-
-        detectInAppBrowser();
+        });
     </script>
 </body>
 </html>
