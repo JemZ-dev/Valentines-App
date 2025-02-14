@@ -57,13 +57,12 @@
             margin-top: 20px;
         }
 
-        .btn-container {
+        .btn-container, .new-btn-container {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 20px;
             margin-top: 20px;
-            position: relative;
         }
 
         button {
@@ -89,20 +88,11 @@
             background-color: #555555;
         }
 
-        /* Floating hearts animation */
-        @keyframes floatHearts {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-100vh); opacity: 0; }
+        .hidden {
+            display: none;
         }
 
-        .floating-heart {
-            position: absolute;
-            font-size: 30px;
-            color: red;
-            animation: floatHearts 3s linear infinite;
-        }
-
-        /* Poem Typing Effect */
+        /* Poem Styling */
         .poem-container {
             margin-top: 30px;
             font-size: 18px;
@@ -112,9 +102,8 @@
             margin-left: auto;
             margin-right: auto;
             visibility: hidden;
-            text-align: left;
-            border-left: 3px solid #800020;
-            padding-left: 15px;
+            text-align: center;
+            white-space: pre-line;
         }
     </style>
 </head>
@@ -136,118 +125,107 @@
 
     <p id="message" class="message">Will you be my Valentine? 💌</p>
 
-    <div class="btn-container">
-        <button id="yes-btn" onclick="sayYes()">Yes! 💖</button>
-        <button id="no-btn" class="no-btn" onclick="sayNo()">No 😢</button>
+    <div id="main-btns" class="btn-container">
+        <button onclick="sayYes()">Yes! 💖</button>
+        <button onclick="sayNo()" class="no-btn">No 😢</button>
+    </div>
+
+    <div id="second-btns" class="new-btn-container hidden">
+        <button onclick="confirmNo()" class="no-btn">Yes 😢</button>
+        <button onclick="sayYes()" class="yes-btn">No! 💖</button>
     </div>
 
     <audio id="love-song" src="i like me better.mp3"></audio>
     <audio id="sad-song" src="me and my broken heart.mp3"></audio>
 
-    <div id="poem" class="poem-container"></div>
+    <!-- Poem Container -->
+    <div id="poem-container" class="poem-container"></div>
 
     <script>
         let loveSong = document.getElementById('love-song');
         let sadSong = document.getElementById('sad-song');
-        let yesButton = document.getElementById('yes-btn');
-        let noButton = document.getElementById('no-btn');
-
+    
         function stopAllAudio() {
             loveSong.pause();
             sadSong.pause();
             loveSong.currentTime = 0;
             sadSong.currentTime = 0;
         }
-
+    
         function sayYes() {
             stopAllAudio();
             document.getElementById('valentine-img').src = "heart eyes cat.gif";
             document.getElementById('message').innerText = "Yeheyy lobe pa ako ! 💖💘";
             loveSong.play();
-            createHearts();
-            yesButton.style.display = "none";
-            noButton.style.display = "none";
-            typePoem("yes");
+    
+            // Hide all buttons
+            document.getElementById('main-btns').classList.add("hidden");
+            document.getElementById('second-btns').classList.add("hidden");
+    
+            // Wait for the song to finish, then type the poem
+            loveSong.onended = function() {
+                const poemText = `
+    My Dearest Maxine,
+    
+    I have loved you in ways words will never be enough to hold.
+    Through every sunrise and every storm, through the quiet moments
+    when the world fades and it’s just us, I have loved you.
+    
+    You are the warmth in my coldest days,
+    the steady hand when the road is rough,
+    the laughter that lingers long after the moment has passed.
+    
+    No matter where life takes us, no matter how far or how near,
+    know this—I will always choose you.
+    In this lifetime and the next, I will find you,
+    just as sure as the tide finds the shore,
+    just as sure as my heart beats for you.
+    
+    We still have a long road ahead, but if it leads to you,
+    then it is a road I will walk a thousand times over.
+    
+    Forever and always,
+    Jem`;
+    
+                typePoem(poemText, "poem-container");
+            };
         }
-
+    
         function sayNo() {
+            stopAllAudio();
+            document.getElementById('message').innerText = "Sure ka na ba? 😢";
+            document.getElementById('valentine-img').src = "thinking cat.gif"; // Change to thinking gif
+    
+            // Hide first buttons, show new buttons
+            document.getElementById('main-btns').classList.add("hidden");
+            document.getElementById('second-btns').classList.remove("hidden");
+        }
+    
+        function confirmNo() {
             stopAllAudio();
             document.getElementById('valentine-img').src = "cat cry.gif";
             document.getElementById('message').innerText = "Hindi mo na ba ako lobe? 😢";
             sadSong.play();
-            yesButton.style.display = "none";
-            noButton.style.display = "none";
-            typePoem("no");
+    
+            // Hide second buttons
+            document.getElementById('second-btns').classList.add("hidden");
         }
-
-        function createHearts() {
-            for (let i = 0; i < 10; i++) {
-                let heart = document.createElement("div");
-                heart.className = "floating-heart";
-                heart.innerText = "❤️";
-                heart.style.left = Math.random() * 100 + "vw";
-                heart.style.animationDuration = Math.random() * 3 + 2 + "s";
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 3000);
-            }
-        }
-
-        function typePoem(type) {
-            let poems = {
-                yes: [
-                    "To the one who holds my heart,",
-                    "You are the light in my darkest days,",
-                    "The warmth in my coldest nights,",
-                    "With you, love feels endless,",
-                    "And my world is painted in colors so bright.",
-                    "I promise to cherish you,",
-                    "To laugh with you,",
-                    "To grow old with you.",
-                    "Forever, my love, is yours to hold."
-                ],
-                no: [
-                    "My Dearest Allie,",
-                    "I couldn’t sleep last night because I know that it’s over between us.",
-                    "I’m not bitter anymore, because I know that what we had was real.",
-                    "And if in some distant place in the future we see each other in our new lives,",
-                    "I’ll smile at you with joy and remember how we spent the summer beneath the trees,",
-                    "learning from each other and growing in love.",
-                    "The best love awakens the soul and makes us reach for more,",
-                    "That’s what you’ve given me.",
-                    "That’s what I hope to give you forever.",
-                    "Love, Noah."
-                ]
-            };
-
-            let poemElement = document.getElementById("poem");
-            poemElement.style.visibility = "visible"; 
-            poemElement.innerHTML = "";  
-
-            let lines = poems[type];
-            let lineIndex = 0;
-
-            function typeNextLine() {
-                if (lineIndex < lines.length) {
-                    let line = document.createElement("p");
-                    line.textContent = "";
-                    poemElement.appendChild(line);
-
-                    let charIndex = 0;
-                    function typeNextChar() {
-                        if (charIndex < lines[lineIndex].length) {
-                            line.textContent += lines[lineIndex].charAt(charIndex);
-                            charIndex++;
-                            setTimeout(typeNextChar, 50);
-                        } else {
-                            lineIndex++;
-                            setTimeout(typeNextLine, 500);
-                        }
-                    }
-                    typeNextChar();
+    
+        function typePoem(text, containerId) {
+            let container = document.getElementById(containerId);
+            container.style.visibility = "visible";  // Make it visible
+            container.innerHTML = ""; // Clear existing content
+    
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    container.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 50); // Typing speed
                 }
             }
-            typeNextLine();
+            type();
         }
     </script>
-</body>
-</html>
+    </body>
+    </html>
