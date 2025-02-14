@@ -19,18 +19,49 @@
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
         }
 
+        .heart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .heart {
+            font-size: 40px;
+            color: red;
+            animation: heartbeat 1s infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .gif-container img {
+            width: 100px;
+            height: auto;
+        }
+
+        .valentine-gif img {
+            width: 340px;
+            height: auto;
+        }
+
         .message {
             font-size: 24px;
             color: #800020;
             margin-top: 20px;
         }
 
-        .gif-container img {
-            width: 340px;
-            height: auto;
-        }
-
         .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
             margin-top: 20px;
             position: relative;
         }
@@ -39,9 +70,8 @@
             background-color: #ff4d6d;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 15px 30px;
             font-size: 20px;
-            margin: 10px;
             border-radius: 10px;
             cursor: pointer;
             transition: 0.3s;
@@ -53,7 +83,7 @@
 
         .no-btn {
             background-color: #888888;
-            position: absolute;
+            position: relative;
         }
 
         .no-btn:hover {
@@ -72,28 +102,55 @@
             color: red;
             animation: floatHearts 3s linear infinite;
         }
+
+        /* Poem Typing Effect */
+        .poem-container {
+            margin-top: 30px;
+            font-size: 18px;
+            color: #800020;
+            font-family: 'Georgia', serif;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            visibility: hidden;
+            text-align: left;
+            border-left: 3px solid #800020;
+            padding-left: 15px;
+        }
     </style>
 </head>
 <body>
     <h1>❤️ Happy Valentine's ❤️</h1>
 
-    <div class="gif-container">
+    <!-- Pulsating Hearts and GIF beside it -->
+    <div class="heart-container">
+        <p class="heart">💖💘💝</p>
+        <div class="gif-container">
+            <img src="embarassed cat.gif" alt="Gift">
+        </div>
+    </div>
+
+    <!-- Centered GIF -->
+    <div class="valentine-gif">
         <img id="valentine-img" src="center cat.png" alt="Animated Heart">
     </div>
 
     <p id="message" class="message">Will you be my Valentine? 💌</p>
 
     <div class="btn-container">
-        <button onclick="sayYes()">Yes! 💖</button>
+        <button id="yes-btn" onclick="sayYes()">Yes! 💖</button>
         <button id="no-btn" class="no-btn">No 😢</button>
     </div>
 
     <audio id="love-song" src="i like me better.mp3"></audio>
     <audio id="sad-song" src="me and my broken heart.mp3"></audio>
 
+    <div id="poem" class="poem-container"></div>
+
     <script>
         let moveCount = 0;
         let noButton = document.getElementById('no-btn');
+        let yesButton = document.getElementById('yes-btn');
         let loveSong = document.getElementById('love-song');
         let sadSong = document.getElementById('sad-song');
 
@@ -118,18 +175,22 @@
         function sayYes() {
             stopAllAudio();
             document.getElementById('valentine-img').src = "heart eyes cat.gif";
-            document.getElementById('message').innerText = "Yay! You're my Valentine! 💖💘";
+            document.getElementById('message').innerText = "Yeheyy lobe pa ako ! 💖💘";
             loveSong.play();
             createHearts();
+            yesButton.style.display = "none";
+            noButton.style.display = "none";
         }
 
         function sayNo() {
             if (moveCount >= 5) {
                 stopAllAudio();
                 document.getElementById('valentine-img').src = "cat cry.gif";
-                document.getElementById('message').innerText = "Maybe next time 😢";
+                document.getElementById('message').innerText = "Hindi mo na ba ako lobe? 😢";
                 sadSong.play();
-                noButton.style.display = "none"; // Hide No button after clicking
+                yesButton.style.display = "none";
+                noButton.style.display = "none";
+                typePoem();
             }
         }
 
@@ -145,21 +206,56 @@
             }
         }
 
-        // Properly bind events to No button
+        function typePoem() {
+            let poemText = [
+                "My Dearest Allie,",
+                "",
+                "I couldn’t sleep last night because I know that it’s over between us.",
+                "I’m not bitter anymore, because I know that what we had was real.",
+                "And if in some distant place in the future we see each other in our new lives,",
+                "I’ll smile at you with joy and remember how we spent the summer beneath the trees,",
+                "learning from each other and growing in love.",
+                "",
+                "The best love is the kind that awakens the soul and makes us reach for more,",
+                "that plants a fire in our hearts and brings peace to our minds.",
+                "That’s what you’ve given me.",
+                "",
+                "That’s what I hope to give you forever.",
+                "",
+                "Love, Noah."
+            ];
+
+            let poemElement = document.getElementById("poem");
+            poemElement.style.visibility = "visible"; 
+            poemElement.innerHTML = "";  
+
+            let lineIndex = 0;
+
+            function typeNextLine() {
+                if (lineIndex < poemText.length) {
+                    let line = document.createElement("p");  
+                    line.textContent = "";  
+                    poemElement.appendChild(line);
+
+                    let charIndex = 0;
+                    function typeNextChar() {
+                        if (charIndex < poemText[lineIndex].length) {
+                            line.textContent += poemText[lineIndex].charAt(charIndex);
+                            charIndex++;
+                            setTimeout(typeNextChar, 50); 
+                        } else {
+                            lineIndex++;
+                            setTimeout(typeNextLine, 500); 
+                        }
+                    }
+                    typeNextChar();  
+                }
+            }
+            typeNextLine();  
+        }
+
         noButton.addEventListener("mouseover", moveNoButton);
         noButton.addEventListener("click", sayNo);
-
-        // Fix for mobile touch (tap = move, long press = click)
-        noButton.addEventListener("touchstart", function (event) {
-            event.preventDefault();
-            moveNoButton();
-        });
-
-        noButton.addEventListener("touchend", function (event) {
-            if (moveCount >= 5) {
-                sayNo();
-            }
-        });
     </script>
 </body>
 </html>
