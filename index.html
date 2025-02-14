@@ -83,7 +83,6 @@
 
         .no-btn {
             background-color: #888888;
-            position: relative;
         }
 
         .no-btn:hover {
@@ -139,7 +138,7 @@
 
     <div class="btn-container">
         <button id="yes-btn" onclick="sayYes()">Yes! 💖</button>
-        <button id="no-btn" class="no-btn">No 😢</button>
+        <button id="no-btn" class="no-btn" onclick="sayNo()">No 😢</button>
     </div>
 
     <audio id="love-song" src="i like me better.mp3"></audio>
@@ -148,22 +147,10 @@
     <div id="poem" class="poem-container"></div>
 
     <script>
-        let moveCount = 0;
-        let noButton = document.getElementById('no-btn');
-        let yesButton = document.getElementById('yes-btn');
         let loveSong = document.getElementById('love-song');
         let sadSong = document.getElementById('sad-song');
-
-        function moveNoButton() {
-            if (moveCount < 5) {
-                let newX = Math.random() * (window.innerWidth - 150);
-                let newY = Math.random() * (window.innerHeight - 150);
-                noButton.style.position = "absolute";
-                noButton.style.left = newX + "px";
-                noButton.style.top = newY + "px";
-                moveCount++;
-            }
-        }
+        let yesButton = document.getElementById('yes-btn');
+        let noButton = document.getElementById('no-btn');
 
         function stopAllAudio() {
             loveSong.pause();
@@ -180,18 +167,17 @@
             createHearts();
             yesButton.style.display = "none";
             noButton.style.display = "none";
+            typePoem("yes");
         }
 
         function sayNo() {
-            if (moveCount >= 5) {
-                stopAllAudio();
-                document.getElementById('valentine-img').src = "cat cry.gif";
-                document.getElementById('message').innerText = "Hindi mo na ba ako lobe? 😢";
-                sadSong.play();
-                yesButton.style.display = "none";
-                noButton.style.display = "none";
-                typePoem();
-            }
+            stopAllAudio();
+            document.getElementById('valentine-img').src = "cat cry.gif";
+            document.getElementById('message').innerText = "Hindi mo na ba ako lobe? 😢";
+            sadSong.play();
+            yesButton.style.display = "none";
+            noButton.style.display = "none";
+            typePoem("no");
         }
 
         function createHearts() {
@@ -206,56 +192,62 @@
             }
         }
 
-        function typePoem() {
-            let poemText = [
-                "My Dearest Allie,",
-                "",
-                "I couldn’t sleep last night because I know that it’s over between us.",
-                "I’m not bitter anymore, because I know that what we had was real.",
-                "And if in some distant place in the future we see each other in our new lives,",
-                "I’ll smile at you with joy and remember how we spent the summer beneath the trees,",
-                "learning from each other and growing in love.",
-                "",
-                "The best love is the kind that awakens the soul and makes us reach for more,",
-                "that plants a fire in our hearts and brings peace to our minds.",
-                "That’s what you’ve given me.",
-                "",
-                "That’s what I hope to give you forever.",
-                "",
-                "Love, Noah."
-            ];
+        function typePoem(type) {
+            let poems = {
+                yes: [
+                    "To the one who holds my heart,",
+                    "You are the light in my darkest days,",
+                    "The warmth in my coldest nights,",
+                    "With you, love feels endless,",
+                    "And my world is painted in colors so bright.",
+                    "I promise to cherish you,",
+                    "To laugh with you,",
+                    "To grow old with you.",
+                    "Forever, my love, is yours to hold."
+                ],
+                no: [
+                    "My Dearest Allie,",
+                    "I couldn’t sleep last night because I know that it’s over between us.",
+                    "I’m not bitter anymore, because I know that what we had was real.",
+                    "And if in some distant place in the future we see each other in our new lives,",
+                    "I’ll smile at you with joy and remember how we spent the summer beneath the trees,",
+                    "learning from each other and growing in love.",
+                    "The best love awakens the soul and makes us reach for more,",
+                    "That’s what you’ve given me.",
+                    "That’s what I hope to give you forever.",
+                    "Love, Noah."
+                ]
+            };
 
             let poemElement = document.getElementById("poem");
             poemElement.style.visibility = "visible"; 
             poemElement.innerHTML = "";  
 
+            let lines = poems[type];
             let lineIndex = 0;
 
             function typeNextLine() {
-                if (lineIndex < poemText.length) {
-                    let line = document.createElement("p");  
-                    line.textContent = "";  
+                if (lineIndex < lines.length) {
+                    let line = document.createElement("p");
+                    line.textContent = "";
                     poemElement.appendChild(line);
 
                     let charIndex = 0;
                     function typeNextChar() {
-                        if (charIndex < poemText[lineIndex].length) {
-                            line.textContent += poemText[lineIndex].charAt(charIndex);
+                        if (charIndex < lines[lineIndex].length) {
+                            line.textContent += lines[lineIndex].charAt(charIndex);
                             charIndex++;
-                            setTimeout(typeNextChar, 50); 
+                            setTimeout(typeNextChar, 50);
                         } else {
                             lineIndex++;
-                            setTimeout(typeNextLine, 500); 
+                            setTimeout(typeNextLine, 500);
                         }
                     }
-                    typeNextChar();  
+                    typeNextChar();
                 }
             }
-            typeNextLine();  
+            typeNextLine();
         }
-
-        noButton.addEventListener("mouseover", moveNoButton);
-        noButton.addEventListener("click", sayNo);
     </script>
 </body>
 </html>
